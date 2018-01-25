@@ -12,4 +12,18 @@ const favoriteBlog = blogs => {
   );
 };
 
-module.exports = { dummy, totalLikes, favoriteBlog };
+const mostBlogs = blogs => {
+  return blogs
+    .reduce((acc, cur) => {
+      const b = acc.find(bb => bb.author === cur.author);
+      if (b === undefined) {
+        acc.push({ author: cur.author, blogs: 1 });
+      } else {
+        b.blogs += 1;
+      }
+      return acc;
+    }, [])
+    .reduce((prev, cur) => (prev.blogs > cur.blogs ? prev : cur));
+};
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };
