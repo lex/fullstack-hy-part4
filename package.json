@@ -1,0 +1,32 @@
+{
+  "name": "fullstack-hy-part4",
+  "version": "1.0.0",
+  "description": "blog list backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "watch": "node_modules/.bin/nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "node_modules/.bin/eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lex/fullstack-hy-part4.git"
+  },
+  "author": "lex",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/lex/fullstack-hy-part4/issues"
+  },
+  "homepage": "https://github.com/lex/fullstack-hy-part4#readme",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "dotenv": "^4.0.0",
+    "express": "^4.16.2",
+    "mongoose": "^5.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.16.0",
+    "nodemon": "^1.14.11"
+  }
+}
