@@ -91,10 +91,9 @@ describe("favorite blog", () => {
   });
 
   test("when a list of blogs with equal likes is given, the function returns one of them", () => {
-    const blogsWithEqualLikes = blogs.map(blog => {
-      blog.likes = 2;
-      return blog;
-    });
+    const blogsWithEqualLikes = blogs.map(blog =>
+      Object.assign({}, blog, { likes: 2 })
+    );
     const result = listHelper.favoriteBlog(blogsWithEqualLikes);
     expect(blogsWithEqualLikes.includes(result)).toBe(true);
   });
@@ -104,6 +103,14 @@ describe("most blogs", () => {
   test("when a list of blogs is given, the author with most blogs should be returned", () => {
     const expected = { author: "Robert C. Martin", blogs: 3 };
     const result = listHelper.mostBlogs(blogs);
+    expect(result).toEqual(expected);
+  });
+});
+
+describe("most likes", () => {
+  test("when a list of blogs is given, the author with most likes should be returned", () => {
+    const expected = { author: "Edsger W. Dijkstra", votes: 17 };
+    const result = listHelper.mostLikes(blogs);
     expect(result).toEqual(expected);
   });
 });

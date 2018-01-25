@@ -21,9 +21,25 @@ const mostBlogs = blogs => {
       } else {
         b.blogs += 1;
       }
+
       return acc;
     }, [])
     .reduce((prev, cur) => (prev.blogs > cur.blogs ? prev : cur));
 };
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };
+const mostLikes = blogs => {
+  return blogs
+    .reduce((acc, cur) => {
+      const b = acc.find(bb => bb.author === cur.author);
+      if (b === undefined) {
+        acc.push({ author: cur.author, votes: cur.likes });
+      } else {
+        b.votes += cur.likes;
+      }
+
+      return acc;
+    }, [])
+    .reduce((prev, cur) => (prev.votes > cur.votes ? prev : cur));
+};
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes };
