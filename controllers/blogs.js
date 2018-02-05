@@ -75,10 +75,22 @@ blogsRouter.post("/", async (request, response) => {
 
 blogsRouter.delete("/:id", async (request, response) => {
   try {
+    const decodedToken = jwt.verify(request.token, process.env.SECRET);
+
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: "token missing or invalid" });
+    }
+
+    const blog = await Blog.findById(request.params.id);
+
+    if (decodedToken.id !== `${blog.user}`) {
+      return response.status(401).json({ error: "unauthorized" });
+    }
+
     await Blog.findByIdAndRemove(request.params.id);
     response.status(204).end();
   } catch (exception) {
-    // console.log(exception);
+    console.log(exception);
     response.status(400).send({ error: "no such id" });
   }
 });
@@ -91,7 +103,7 @@ blogsRouter.put("/:id", async (request, response) => {
     });
     response.json(updatedBlog);
   } catch (exception) {
-    // console.log(exception);
+    console.log(exception);
     response.status(400).send({ error: "no such id" });
   }
 });
