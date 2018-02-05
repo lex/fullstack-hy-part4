@@ -10,8 +10,11 @@ const blogsRouter = require("./controllers/blogs");
 const usersRouter = require("./controllers/users");
 const loginRouter = require("./controllers/login");
 
+const tokenExtractor = require("./utils/token-extractor");
+
 app.use(cors());
 app.use(bodyParser.json());
+app.use(tokenExtractor);
 
 const mongoUrl = config.mongoUrl;
 mongoose.connect(mongoUrl);
