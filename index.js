@@ -17,6 +17,9 @@ const PORT = config.port;
 const blogsRouter = require("./controllers/blogs");
 app.use("/api/blogs", blogsRouter);
 
+const usersRouter = require("./controllers/users");
+app.use("/api/users", usersRouter);
+
 const server = http.createServer(app);
 
 server.listen(PORT, () => {
