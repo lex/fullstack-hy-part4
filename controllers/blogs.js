@@ -1,10 +1,15 @@
 const blogsRouter = require("express").Router();
 const Blog = require("../models/blog");
+const User = require("../models/user");
 
 blogsRouter.get("/", async (request, response) => {
   try {
-    const blogs = await Blog.find({});
-    response.json(blogs);
+    const blogs = await Blog.find({}).populate("user", {
+      _id: 1,
+      username: 1,
+      name: 1
+    });
+    response.json(blogs.map(Blog.format));
   } catch (exception) {
     response.status(500).json({ error: "something went wrong" });
   }
@@ -13,8 +18,9 @@ blogsRouter.get("/", async (request, response) => {
 blogsRouter.get("/:id", async (request, response) => {
   try {
     const blog = await Blog.findById(request.params.id);
+
     if (blog) {
-      response.json(blog);
+      response.json(Blog.format(blog));
     } else {
       response.status(404).end();
     }
@@ -39,10 +45,22 @@ blogsRouter.post("/", async (request, response) => {
       return response.status(400).json({ error: "url missing" });
     }
 
-    const blog = new Blog(request.body);
+    const user = await User.findOne({});
 
-    const result = await blog.save();
-    response.status(201).json(result);
+    const blog = new Blog({
+      author: body.author,
+      title: body.title,
+      url: body.url,
+      likes: body.likes,
+      user: user._id
+    });
+
+    const savedBlog = await blog.save();
+
+    user.blogs = user.blogs.concat(savedBlog._id);
+    await user.save();
+
+    response.status(201).json(savedBlog);
   } catch (exception) {
     console.log(exception);
     response.status(500).json({ error: "something went wrong" });
@@ -54,7 +72,7 @@ blogsRouter.delete("/:id", async (request, response) => {
     await Blog.findByIdAndRemove(request.params.id);
     response.status(204).end();
   } catch (exception) {
-    console.log(exception);
+    // console.log(exception);
     response.status(400).send({ error: "no such id" });
   }
 });
@@ -67,7 +85,7 @@ blogsRouter.put("/:id", async (request, response) => {
     });
     response.json(updatedBlog);
   } catch (exception) {
-    console.log(exception);
+    // console.log(exception);
     response.status(400).send({ error: "no such id" });
   }
 });

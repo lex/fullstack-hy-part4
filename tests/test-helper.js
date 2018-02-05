@@ -99,6 +99,10 @@ const blogsInDb = async () => {
 };
 
 const initializeDatabase = async () => {
+  await User.remove({});
+  const user = new User({ username: "root", password: "sekret" });
+  await user.save();
+
   await Blog.remove({});
 
   await Promise.all(
@@ -110,13 +114,16 @@ const initializeDatabase = async () => {
 };
 
 const createNewBlog = () => {
-  return { title: "j", author: "j", url: "j" };
+  return {
+    title: "j",
+    author: "j",
+    url: "j"
+  };
 };
 
 const usersInDb = async () => {
   const users = await User.find({});
   return users;
-  //   return blogs.map(format);
 };
 
 const createNewUser = (username, password, name, adult) => {
@@ -128,6 +135,11 @@ const createNewUser = (username, password, name, adult) => {
   };
 };
 
+const getUserFromDb = async () => {
+  const user = await User.findOne({});
+  return user;
+};
+
 module.exports = {
   initialBlogs,
   format,
@@ -135,5 +147,6 @@ module.exports = {
   blogsInDb,
   createNewBlog,
   usersInDb,
-  createNewUser
+  createNewUser,
+  getUserFromDb
 };

@@ -10,7 +10,7 @@ const {
   createNewBlog
 } = require("./test-helper");
 
-describe.skip("GET /api/blogs", () => {
+describe("GET /api/blogs", () => {
   beforeEach(async () => {
     await initializeDatabase();
   });
@@ -36,7 +36,7 @@ describe.skip("GET /api/blogs", () => {
   });
 });
 
-describe.skip("POST /api/blogs", () => {
+describe("POST /api/blogs", () => {
   beforeEach(async () => {
     await initializeDatabase();
   });
@@ -45,7 +45,7 @@ describe.skip("POST /api/blogs", () => {
     const newBlog = createNewBlog();
     const blogsBefore = await blogsInDb();
 
-    await api
+    const response = await api
       .post("/api/blogs")
       .send(newBlog)
       .expect(201)
@@ -90,7 +90,7 @@ describe.skip("POST /api/blogs", () => {
   });
 });
 
-describe.skip("DELETE /api/blogs/<id>", () => {
+describe("DELETE /api/blogs/<id>", () => {
   beforeEach(async () => {
     await initializeDatabase();
   });
@@ -114,7 +114,7 @@ describe.skip("DELETE /api/blogs/<id>", () => {
   });
 });
 
-describe.skip("PUT /api/blogs/<id>", () => {
+describe("PUT /api/blogs/<id>", () => {
   beforeEach(async () => {
     await initializeDatabase();
   });
