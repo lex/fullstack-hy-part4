@@ -90,6 +90,30 @@ describe("POST /api/blogs", () => {
   });
 });
 
+describe("DELETE /api/blogs/<id>", () => {
+  beforeEach(async () => {
+    await initializeDatabase();
+  });
+
+  test("a blog with a valid id is deleted from the list", async () => {
+    const blogsBefore = await blogsInDb();
+    const id = `${blogsBefore[0].id}`;
+
+    await api.delete(`/api/blogs/${id}`).expect(204);
+
+    const blogsAfter = await blogsInDb();
+
+    expect(blogsAfter.length).toBe(blogsBefore.length - 1);
+    expect(blogsAfter.filter(b => b.id === id).length).toBe(0);
+  });
+
+  test("a blog with an invalid id returns a suitable status code", async () => {
+    const id = "1";
+
+    await api.delete(`/api/blogs/${id}`).expect(400);
+  });
+});
+
 afterAll(() => {
   server.close();
 });
