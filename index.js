@@ -3,23 +3,28 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const config = require("./utils/config");
 const mongoose = require("mongoose");
 
 app.use(cors());
 app.use(bodyParser.json());
 
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
-
-const mongoUrl = process.env.MONGODB_URI;
+const mongoUrl = config.mongoUrl;
 mongoose.connect(mongoUrl);
 mongoose.Promise = global.Promise;
-const PORT = process.env.PORT || 3001;
+const PORT = config.port;
 
 const blogsRouter = require("./controllers/blogs");
 app.use("/api/blogs", blogsRouter);
 
-app.listen(PORT, () => {
+const server = http.createServer(app);
+
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+server.on("close", () => {
+  mongoose.connection.close();
+});
+
+module.exports = { app, server };
