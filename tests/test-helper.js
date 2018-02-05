@@ -1,4 +1,5 @@
 const Blog = require("../models/blog");
+const User = require("../models/user");
 
 const initialBlogs = [
   {
@@ -54,6 +55,34 @@ const initialBlogs = [
   }
 ];
 
+const initialUsers = [
+  {
+    username: "mluukkai",
+    _id: 123456,
+    notes: [
+      {
+        content: "HTML on helppoa",
+        important: false
+      },
+      {
+        content: "HTTP-protokollan tärkeimmät metodit ovat GET ja POST",
+        important: true
+      }
+    ]
+  },
+  {
+    content: "hellas",
+    _id: 141414,
+    notes: [
+      {
+        content:
+          "Java on kieli, jota käytetään siihen asti kunnes aurinko sammuu",
+        important: false
+      }
+    ]
+  }
+];
+
 const format = blog => {
   return {
     title: blog.title,
@@ -84,10 +113,27 @@ const createNewBlog = () => {
   return { title: "j", author: "j", url: "j" };
 };
 
+const usersInDb = async () => {
+  const users = await User.find({});
+  return users;
+  //   return blogs.map(format);
+};
+
+const createNewUser = (username, password, name, adult) => {
+  return {
+    username: username,
+    name: name,
+    password: password,
+    adult: adult
+  };
+};
+
 module.exports = {
   initialBlogs,
   format,
   initializeDatabase,
   blogsInDb,
-  createNewBlog
+  createNewBlog,
+  usersInDb,
+  createNewUser
 };

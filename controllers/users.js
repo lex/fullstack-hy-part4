@@ -25,13 +25,26 @@ usersRouter.post("/", async (request, response) => {
   try {
     const body = request.body;
 
+    if (body.password.length < 3) {
+      return response.status(400).json({ error: "password too short" });
+    }
+
+    if (body.username === undefined) {
+      return response.status(400).json({ error: "no username provided" });
+    }
+
+    const existingUser = await User.findOne({ username: body.username });
+    if (existingUser !== null) {
+      return response.status(400).json({ error: "username taken" });
+    }
+
     const saltRounds = 10;
     const passwordHash = await bcrypt.hash(body.password, saltRounds);
 
     const user = new User({
       username: body.username,
       name: body.name,
-      adult: body.adult,
+      adult: body.adult || true,
       passwordHash
     });
 
