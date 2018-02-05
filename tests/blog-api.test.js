@@ -114,6 +114,45 @@ describe("DELETE /api/blogs/<id>", () => {
   });
 });
 
+describe("PUT /api/blogs/<id>", () => {
+  beforeEach(async () => {
+    await initializeDatabase();
+  });
+
+  test("a blog with a valid id is modified", async () => {
+    const blogsBefore = await blogsInDb();
+    const id = `${blogsBefore[0].id}`;
+    let newBlog = createNewBlog();
+    const likes = 7;
+    newBlog.likes = likes;
+
+    await api
+      .put(`/api/blogs/${id}`)
+      .send(newBlog)
+      .expect(200);
+
+    const blogsAfter = await blogsInDb();
+    const modifiedBlog = blogsAfter.filter(b => `${b.id}` === id)[0];
+
+    expect(modifiedBlog.author === newBlog.author);
+    expect(modifiedBlog.title === newBlog.title);
+    expect(modifiedBlog.url === newBlog.url);
+    expect(modifiedBlog.likes === newBlog.likes);
+  });
+
+  test("a blog with an invalid id return a suitable status code", async () => {
+    const id = "5";
+    let newBlog = createNewBlog();
+    const likes = 7;
+    newBlog.likes = likes;
+
+    await api
+      .put(`/api/blogs/${id}`)
+      .send(newBlog)
+      .expect(400);
+  });
+});
+
 afterAll(() => {
   server.close();
 });
