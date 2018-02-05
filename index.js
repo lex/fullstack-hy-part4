@@ -6,6 +6,10 @@ const cors = require("cors");
 const config = require("./utils/config");
 const mongoose = require("mongoose");
 
+const blogsRouter = require("./controllers/blogs");
+const usersRouter = require("./controllers/users");
+const loginRouter = require("./controllers/login");
+
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -14,11 +18,9 @@ mongoose.connect(mongoUrl);
 mongoose.Promise = global.Promise;
 const PORT = config.port;
 
-const blogsRouter = require("./controllers/blogs");
 app.use("/api/blogs", blogsRouter);
-
-const usersRouter = require("./controllers/users");
 app.use("/api/users", usersRouter);
+app.use("/api/login", loginRouter);
 
 const server = http.createServer(app);
 
