@@ -100,8 +100,12 @@ blogsRouter.put("/:id", async (request, response) => {
     const body = request.body;
     const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, body, {
       new: true
+    }).populate('user', {
+      _id: 1,
+      username: 1,
+      name: 1
     });
-    response.json(updatedBlog);
+    response.json(Blog.format(updatedBlog));
   } catch (exception) {
     console.log(exception);
     response.status(400).send({ error: "no such id" });
